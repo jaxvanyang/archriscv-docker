@@ -1,0 +1,38 @@
+name: Build & deploy Docker
+on: [ workflow_dispatch ]
+
+env:
+  RELEASE: 20210601
+
+jobs:
+  x64:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Download RootFS
+        run: make RELEASE=${{ env.RELEASE }} download
+      -
+        name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          build-args: RELEASE=${{ env.RELEASE }}
+          context: .
+          platforms: linux/riscv64
+          push: false
+          tags: archriscv:${{ env.RELEASE }}
+      -
+        name: Running Docker image to test
+        uses: addnab/docker-run-action@v3
+        with:
+          image: archriscv:${{ env.RELEASE }}
+          run: uname -a
