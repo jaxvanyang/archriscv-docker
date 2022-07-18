@@ -61,7 +61,7 @@ jobs:
         name: Build & publish Docker image
         uses: docker/build-push-action@v3
         with:
-          build-args: RELEASE=${{ env.RELEASE }} REPO=${{ secrets.DOCKERHUB_USERNAME }}
+          build-args: RELEASE=${{ env.RELEASE }},REPO=${{ secrets.DOCKERHUB_USERNAME }}
           context: .
           file: latest.dockerfile
           platforms: linux/riscv64
