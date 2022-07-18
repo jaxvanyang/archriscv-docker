@@ -22,18 +22,17 @@ jobs:
         name: Download RootFS
         run: make RELEASE=${{ env.RELEASE }} download
       -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
         name: Build Docker image
         uses: docker/build-push-action@v3
         with:
           build-args: RELEASE=${{ env.RELEASE }}
           context: .
           platforms: linux/riscv64
-          push: false
-          tags: archriscv:${{ env.RELEASE }}
-          outputs: "type=image,name=archriscv:${{ env.RELEASE}},push=false"
-      -
-        name: List images
-        run: docker images --all
-      -
-        name: Trying out the image
-        run: docker run --rm --platform linux/riscv64 archriscv:${{ env.RELEASE }} uname -a
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/archriscv:${{ env.RELEASE }}
