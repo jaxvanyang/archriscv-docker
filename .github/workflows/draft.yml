@@ -31,9 +31,5 @@ jobs:
           push: false
           tags: archriscv:${{ env.RELEASE }}
       -
-        name: Running Docker image to test
-        uses: addnab/docker-run-action@v3
-        with:
-          image: archriscv:${{ env.RELEASE }}
-          options: --platform linux/riscv64
-          run: uname -a
+        name: Trying out the image
+        run: docker run --rm --platform linux/riscv64 archriscv:${{ env.RELEASE }} uname -a
