@@ -30,6 +30,7 @@ jobs:
           platforms: linux/riscv64
           push: false
           tags: archriscv:${{ env.RELEASE }}
+          output: type=image,name=archriscv:${{ env.RELEASE}},push=false
       -
         name: Trying out the image
         run: docker run --rm --platform linux/riscv64 archriscv:${{ env.RELEASE }} uname -a
