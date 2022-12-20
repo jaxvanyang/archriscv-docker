@@ -1,7 +1,7 @@
 .PHONY: download clean
 
 BASEURL ?= https://archriscv.felixc.at/images/
-RELEASE ?= 20210601
+RELEASE ?= 20220727
 ARCHIVE ?= archriscv-$(RELEASE).tar.zst
 
 download: $(ARCHIVE)
