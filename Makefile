@@ -1,4 +1,4 @@
-.PHONY: download clean release_num docker_image
+.PHONY: download clean release_num docker_image tar
 
 DOCKERHUB_USER ?= jaxvanyang
 BASEURL ?= https://archriscv.felixc.at/images/
@@ -19,6 +19,7 @@ docker_image: $(TAR) Dockerfile
 	docker buildx build -t $(DOCKERHUB_USER)/archriscv:$(RELEASE) --load \
 		--platform linux/riscv64 --build-arg RELEASE=$(RELEASE) .
 
+tar: $(TAR)
 $(TAR): $(ARCHIVE)
 	zstd -d $^
 
