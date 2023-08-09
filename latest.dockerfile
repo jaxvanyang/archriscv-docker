@@ -1,6 +1,6 @@
-ARG REPO
+ARG USER
 ARG RELEASE
 
-FROM ${REPO}/archriscv:${RELEASE}
+FROM ${USER}/archriscv:${RELEASE}
 
-RUN pacman -Syu --noconfirm
+RUN pacman -Syu --noconfirm && pacman -Scc
