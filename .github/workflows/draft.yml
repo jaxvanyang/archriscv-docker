@@ -48,3 +48,7 @@ jobs:
             --build-arg "USER=$DOCKERHUB_USERNAME" \
             --build-arg "RELEASE=$RELEASE" \
             .
+      - name: Test Docker images
+        run: |
+          docker run --rm --platform linux/riscv64 "$DOCKERHUB_USERNAME/archriscv:$RELEASE" uname -a
+          docker run --rm --platform linux/riscv64 "$DOCKERHUB_USERNAME/archriscv:latest" uname -a
