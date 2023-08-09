@@ -1,5 +1,6 @@
-.PHONY: download clean
+.PHONY: download clean release_num docker_image
 
+DOCKERHUB_USER ?= jaxvanyang
 BASEURL ?= https://archriscv.felixc.at/images/
 RELEASE_REGEX := ^.*href="archriscv-([0-9-]+).tar.zst".*$$
 
@@ -12,6 +13,14 @@ endef
 
 RELEASE ?= $(shell $(get_release))
 ARCHIVE := archriscv-$(RELEASE).tar.zst
+TAR := archriscv-$(RELEASE).tar
+
+docker_image: $(TAR) Dockerfile
+	docker buildx build -t $(DOCKERHUB_USER)/archriscv:$(RELEASE) --load \
+		--platform linux/riscv64 --build-arg RELEASE=$(RELEASE) .
+
+$(TAR): $(ARCHIVE)
+	zstd -d $^
 
 download: $(ARCHIVE)
 	@echo "RootFS archive $(ARCHIVE) succefully downloaded"
@@ -19,5 +28,8 @@ download: $(ARCHIVE)
 $(ARCHIVE):
 	@curl --location --remote-name "$(BASEURL)/$(ARCHIVE)"
 
+release_num:
+	@echo $(RELEASE)
+
 clean:
-	rm *.tar.zst
+	-rm *.tar.zst *.tar
