@@ -1,6 +1,8 @@
 name: Build & publish Docker image
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 15 * *'
 env:
   DOCKERHUB_USERNAME: jaxvanyang
 jobs:
